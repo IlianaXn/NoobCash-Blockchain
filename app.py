@@ -22,7 +22,7 @@ CORS(app)
 # execute transactions in given file matching our node_id
 def read_trans():
     with app.app_context():
-        with open(f'transactions\\5nodes\\transactions{my_node.id}.txt') as f, \
+        with open(f'transactions\\{N}nodes\\transactions{my_node.id}.txt') as f, \
                 open(f'results\\result_{my_node.id}.txt', "w") as test_file:
 
             trans_id = 0
@@ -85,8 +85,9 @@ def updateRing():
     if ring is None:
         abort(404, description="Parameter not found in setRing endpoint")
     my_node.set_ring(ring)
-    thread = threading.Thread(target=read_trans, name='make transactions')
-    thread.start()
+    if test:
+        thread = threading.Thread(target=read_trans, name='make transactions')
+        thread.start()
     return Response(status=200)
 
 
@@ -104,7 +105,7 @@ def registerNode():
         'node_id': registered_node_id,
         'chain': my_chain
     }
-    if updated_info['node_id'] == N - 1:
+    if updated_info['node_id'] == N - 1 and test:
         thread = threading.Thread(target=read_trans, name='make transactions')
         thread.start()
     return jsonify(jsonpickle.encode(updated_info))
@@ -226,11 +227,13 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', default=5000, type=int, help='port to listen on')
     parser.add_argument('-id', '--id', default=None, type=int, help='id, given for bootstrap')
+    parser.add_argument('-test', '--test', action='store_true', help='run tests with given transaction files')
 
     args = parser.parse_args()
 
     node_id = args.id
     port = args.port
+    test = args.test
 
     # for localhost
     #host_name = socket.gethostname()

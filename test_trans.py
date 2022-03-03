@@ -8,6 +8,8 @@ import os
 
 load_dotenv()
 N = int(os.getenv("N"))
+CAPACITY = int(os.getenv("CAPACITY"))
+MINING_DIFFICULTY = int(os.getenv("MINING_DIFFICULTY"))
 
 
 def do_trans():
@@ -16,13 +18,14 @@ def do_trans():
 
     addr = ni.ifaddresses('eth1')[ni.AF_INET][0]['addr']
 
-    input('Press ENTER when you are sure mining is all over!')
+    # input('Press ENTER when you are sure mining is all over!')
     init = None
     num_trans = 0
     block_times = []
     initial_time = 0
     last_time = 0
     num_blocks = 0
+    different_chains = False
 
     for addr_last in range(1, 6):
         for node_port in range(5000, 5002):
@@ -37,7 +40,7 @@ def do_trans():
                 init = info
             num_trans = 0
             block_times = []
-            ignore = 4
+            ignore = N - 1
             first_t_flag = False
 
             for block in info[1:]:
@@ -45,11 +48,15 @@ def do_trans():
                     if ignore:
                         ignore -= 1
                     elif not first_t_flag:
-                        initial_time = trans.timestamp
+                        initial_time = last_time = trans.timestamp
                         first_t_flag = True
                         num_trans += 1
                     else:
                         num_trans += 1
+                        if trans.timestamp < initial_time:
+                            initial_time = trans.timestamp
+                        elif trans.timestamp > last_time:
+                            last_time = trans.timestamp
                 if first_t_flag:
                     if block_times:
                         temp = block.timestamp - block_times[-1]
@@ -57,13 +64,14 @@ def do_trans():
                         block_times.extend([temp, block.timestamp])
                     else:
                         block_times.append(block.timestamp)
-            last_time = info[-1].listOfTransactions[-1].timestamp
-            if info == init:
-                print('Same :)')
-            else:
-                print('Different :(')
+            if info != init:
+                different_chains = True
             num_blocks = len(info)
 
+    print('Different chains!' if different_chains else 'Same chains!')
+    print('N =', N)
+    print('Difficulty =', MINING_DIFFICULTY)
+    print('Capacity =', CAPACITY)
     print('Total transactions =', num_trans)
     print('Total time for trans =', last_time - initial_time, 's')
     print('Total number of blocks =', num_blocks)
