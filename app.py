@@ -1,3 +1,4 @@
+import netifaces as ni
 import json
 import socket
 import threading
@@ -66,14 +67,14 @@ def hello():
 @app.route('/transactions/get', methods=['GET'])
 def get_transactions():
     info = []
-    for x in my_node.block.listOfTransactions:
+    for x in my_node.transactions:
         info.append({
             'sender': find_id(my_node.ring, x.sender_address),
             'receiver': find_id(my_node.ring, x.receiver_address),
             'amount': x.amount,
             'timestamp': x.timestamp
         })
-    return jsonify(info), 200
+    return jsonify(info=info, length=len(info)), 200
 
 
 # not used in bootstrap node
@@ -231,8 +232,11 @@ if __name__ == '__main__':
     node_id = args.id
     port = args.port
 
-    host_name = socket.gethostname()
-    host_ip = socket.gethostbyname(host_name)
+    # for localhost
+    #host_name = socket.gethostname()
+    #host_ip = socket.gethostbyname(host_name)
+
+    host_ip = ni.ifaddresses('eth1')[ni.AF_INET][0]['addr']
 
     my_node = Node(node_id, host_ip, port)
 

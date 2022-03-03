@@ -4,6 +4,7 @@ import json
 import socket
 import time
 import requests
+import netifaces as ni
 
 
 class CLI(cmd.Cmd):
@@ -13,7 +14,8 @@ class CLI(cmd.Cmd):
     def __init__(self, node_port):
         super(CLI, self).__init__()
         self.port = node_port
-        self.addr = socket.gethostbyname(socket.gethostname())
+        # self.addr = socket.gethostbyname(socket.gethostname())
+        self.addr = ni.ifaddresses('eth1')[ni.AF_INET][0]['addr']
 
     def preloop(self):
         self.do_help('')
@@ -35,6 +37,7 @@ class CLI(cmd.Cmd):
             'id': receiver_id,
             'amount': amount
         })
+
         info = requests.post(f'http://{self.addr}:{self.port}/createTransaction/', json=con)
         if info.ok:
             print('Done!')
