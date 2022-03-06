@@ -58,8 +58,6 @@ class Node:
             a lock used to ensure isolation between procedures which change same objects
         self.mining_lock : threading.Lock
             a lock used to assure isolation of mining procedure
-        self.resolve_lock : threading.Lock
-            a lock used to assure isolation of resolving conflicts procedure
 
         Methods
         -------
@@ -130,7 +128,6 @@ class Node:
         self.mining_flag = False
         self.lock = threading.Lock()
         self.mining_lock = threading.Lock()
-        self.resolve_lock = threading.Lock()
 
     def create_wallet(self) -> Wallet:
         """Creates the wallet of the node.
@@ -640,10 +637,8 @@ class Node:
             The Flask environment in order to be able to create http requests.
         """
         with app.app_context():
-            with self.resolve_lock:
-                my_length = len(self.chain)
-                dominant = None
-                chain = None
+            with self.lock:
+                chains = []
                 for x in self.ring:
                     if x[2] == self.ring[self.id][2]:
                         continue
@@ -654,11 +649,11 @@ class Node:
                         print(f'Exception {e} occurred while trying to get '
                               f'chain of node {x[0]}:{x[1]}')
                     info = jsonpickle.decode(r.json(), keys=True)['chain']
-                    if len(info) > my_length:
-                        dominant = x
-                        chain = info
+                    chains.append((x, info))
+                dominant, chain = sorted(chains, key=lambda t: len(t[1]), reverse=True)[0]
+                if len(chain) <= len(self.chain):
+                    dominant = None
                 if dominant:
-                    with self.lock:
-                        # based upon dominant chain recalculate node's NBCs
-                        self.recalculate_NBCs(chain)
-                        print('I replaced my chain')
+                    # based upon dominant chain recalculate node's NBCs
+                    self.recalculate_NBCs(chain)
+                    print('I replaced my chain')

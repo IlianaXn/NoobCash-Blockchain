@@ -1,0 +1,108 @@
+Same chains!
+N = 5
+Difficulty = 4
+Capacity = 1
+Total transactions = 474
+Total time for trans = 94.54677653312683 s
+Total number of blocks = 479
+Throughput = 5.01339143840533 t/s
+Mean time of mining = 1.4974621153785108 s
+Same chains!
+N = 5
+Difficulty = 4
+Capacity = 5
+Total transactions = 466
+Total time for trans = 168.62446856498718 s
+Total number of blocks = 95
+Throughput = 2.7635372491650316 t/s
+Mean time of mining = 7.698332499432308 s
+Same chains!
+N = 5
+Difficulty = 4
+Capacity = 10
+Total transactions = 466
+Total time for trans = 108.37146401405334 s
+Total number of blocks = 48
+Throughput = 4.300024958042186 t/s
+Mean time of mining = 15.162703441536944 s
+Same chains!
+N = 5
+Difficulty = 5
+Capacity = 1
+Total transactions = 469
+Total time for trans = 96.84050607681274 s
+Total number of blocks = 474
+Throughput = 4.843014756944731 t/s
+Mean time of mining = 22.54826888009014 s
+Same chains!
+N = 5
+Difficulty = 5
+Capacity = 5
+Total transactions = 476
+Total time for trans = 145.2200164794922 s
+Total number of blocks = 97
+Throughput = 3.277785057042878 t/s
+Mean time of mining = 113.44382275280199 s
+Same chains!
+N = 5
+Difficulty = 5
+Capacity = 10
+Total transactions = 466
+Total time for trans = 111.87665677070618 s
+Total number of blocks = 48
+Throughput = 4.165301444027577 t/s
+Mean time of mining = 132.4178379514943 s
+Same chains!
+N = 10
+Difficulty = 4
+Capacity = 1
+Total transactions = 992
+Total time for trans = 45.23356294631958 s
+Total number of blocks = 1002
+Throughput = 21.930618226497984 t/s
+Mean time of mining = 3.16070279006881 s
+Same chains!
+N = 10
+Difficulty = 4
+Capacity = 5
+Total transactions = 971
+Total time for trans = 41.449538469314575 s
+Total number of blocks = 197
+Throughput = 23.42607507484888 t/s
+Mean time of mining = 3.3993656721311747 s
+Same chains!
+N = 10
+Difficulty = 4
+Capacity = 10
+Total transactions = 971
+Total time for trans = 42.153695583343506 s
+Total number of blocks = 99
+Throughput = 23.034753811328425 t/s
+Mean time of mining = 7.079975064267817 s
+Same chains!
+N = 10
+Difficulty = 5
+Capacity = 1
+Total transactions = 973
+Total time for trans = 39.54666757583618 s
+Total number of blocks = 983
+Throughput = 24.603842994713485 t/s
+Mean time of mining = 10.781731364413053 s
+Same chains!
+N = 10
+Difficulty = 5
+Capacity = 5
+Total transactions = 971
+Total time for trans = 38.71562600135803 s
+Total number of blocks = 197
+Throughput = 25.080312532359418 t/s
+Mean time of mining = 50.1477613277042 s
+Same chains!
+N = 10
+Difficulty = 5
+Capacity = 10
+Total transactions = 971
+Total time for trans = 40.25836229324341 s
+Total number of blocks = 99
+Throughput = 24.11921262288813 t/s
+Mean time of mining = 107.57519705762569 s

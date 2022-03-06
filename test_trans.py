@@ -24,8 +24,9 @@ def do_trans():
     block_times = []
     initial_time = 0
     last_time = 0
-    num_blocks = 0
     different_chains = False
+    ignore = N - 1
+    first_t_flag = False
 
     for addr_last in range(1, 6):
         for node_port in range(5000, 5002):
@@ -38,35 +39,31 @@ def do_trans():
             # we will ignore genesis and initial 100s transactions i.e. first 4 or 9 trans
             if addr_last == 1 and node_port == 5000:
                 init = info
-            num_trans = 0
-            block_times = []
-            ignore = N - 1
-            first_t_flag = False
-
-            for block in info[1:]:
-                for trans in block.listOfTransactions:
-                    if ignore:
-                        ignore -= 1
-                    elif not first_t_flag:
-                        initial_time = last_time = trans.timestamp
-                        first_t_flag = True
-                        num_trans += 1
-                    else:
-                        num_trans += 1
-                        if trans.timestamp < initial_time:
-                            initial_time = trans.timestamp
-                        elif trans.timestamp > last_time:
-                            last_time = trans.timestamp
-                if first_t_flag:
-                    if block_times:
-                        temp = block.timestamp - block_times[-1]
-                        block_times = block_times[:-1]
-                        block_times.extend([temp, block.timestamp])
-                    else:
-                        block_times.append(block.timestamp)
             if info != init:
                 different_chains = True
-            num_blocks = len(info)
+
+    for block in init[1:]:
+        for trans in block.listOfTransactions:
+            if ignore:
+                ignore -= 1
+            elif not first_t_flag:
+                initial_time = last_time = trans.timestamp
+                first_t_flag = True
+                num_trans += 1
+            else:
+                num_trans += 1
+                if trans.timestamp < initial_time:
+                    initial_time = trans.timestamp
+                elif trans.timestamp > last_time:
+                    last_time = trans.timestamp
+        if first_t_flag:
+            if block_times:
+                temp = block.timestamp - block_times[-1]
+                block_times = block_times[:-1]
+                block_times.extend([temp, block.timestamp])
+            else:
+                block_times.append(block.timestamp)
+    num_blocks = len(init)
 
     print('Different chains!' if different_chains else 'Same chains!')
     print('N =', N)
