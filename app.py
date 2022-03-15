@@ -10,6 +10,7 @@ from flask_cors import CORS
 from Node import Node
 from dotenv import load_dotenv
 from werkzeug.exceptions import HTTPException
+import time
 
 load_dotenv()
 N = int(os.getenv("N"))
@@ -22,8 +23,8 @@ CORS(app)
 # execute transactions in given file matching our node_id
 def read_trans():
     with app.app_context():
-        with open(f'transactions\\{N}nodes\\transactions{my_node.id}.txt') as f, \
-                open(f'results\\result_{my_node.id}.txt', "w") as test_file:
+        with open(f'transactions/{N}nodes/transactions{my_node.id}.txt') as f, \
+                open(f'results/result_{my_node.id}.txt', "w") as test_file:
 
             trans_id = 0
             while True:

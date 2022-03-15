@@ -1,10 +1,10 @@
-import socket
 import jsonpickle
 import numpy as np
 import requests
 import netifaces as ni
 from dotenv import load_dotenv
 import os
+import time
 
 load_dotenv()
 N = int(os.getenv("N"))
@@ -22,11 +22,10 @@ def do_trans():
     init = None
     num_trans = 0
     block_times = []
-    initial_time = 0
+    initial_time = time.time()
     last_time = 0
     different_chains = False
     ignore = N - 1
-    first_t_flag = False
 
     for addr_last in range(1, 6):
         for node_port in range(5000, 5002):
@@ -46,23 +45,18 @@ def do_trans():
         for trans in block.listOfTransactions:
             if ignore:
                 ignore -= 1
-            elif not first_t_flag:
-                initial_time = last_time = trans.timestamp
-                first_t_flag = True
-                num_trans += 1
             else:
                 num_trans += 1
                 if trans.timestamp < initial_time:
                     initial_time = trans.timestamp
-                elif trans.timestamp > last_time:
-                    last_time = trans.timestamp
-        if first_t_flag:
+        if not ignore:
             if block_times:
                 temp = block.timestamp - block_times[-1]
                 block_times = block_times[:-1]
                 block_times.extend([temp, block.timestamp])
             else:
                 block_times.append(block.timestamp)
+    last_time = init[-1].timestamp
     num_blocks = len(init)
 
     print('Different chains!' if different_chains else 'Same chains!')
