@@ -11,6 +11,7 @@ from Node import Node
 from dotenv import load_dotenv
 from werkzeug.exceptions import HTTPException
 import time
+from Transaction import Transaction
 
 load_dotenv()
 N = int(os.getenv("N"))
@@ -118,12 +119,15 @@ def create_transaction():
     info = json.loads(request.json)
     if info is None:
         abort(404, description="Parameter not found in createTransaction endpoint")
-    receiver_addr = my_node.ring[info['id']][2]
-    flag = my_node.create_transaction(receiver_addr, info['amount'])
-    if flag:
-        return Response(status=200)
-    else:
+    elif info['id'] not in range(0, N):
         return Response(status=400)
+    else:
+        receiver_addr = my_node.ring[info['id']][2]
+        flag = my_node.create_transaction(receiver_addr, info['amount'])
+        if flag:
+            return Response(status=200)
+        else:
+            return Response(status=400)
 
 
 # receive (broadcast) transaction executed by someone except for me
@@ -178,12 +182,20 @@ def get_last_trans():
     block_trans = my_node.chain[-1].listOfTransactions
     info = []
     for x in block_trans:
-        info.append({
-            'sender': find_id(my_node.ring, x.sender_address),
-            'receiver': find_id(my_node.ring, x.receiver_address),
-            'amount': x.amount,
-            'timestamp': x.timestamp
-        })
+        if isinstance(x, Transaction):
+            info.append({
+                'sender': find_id(my_node.ring, x.sender_address),
+                'receiver': find_id(my_node.ring, x.receiver_address),
+                'amount': x.amount,
+                'timestamp': x.timestamp
+            })
+        else:
+            info.append({
+                'sender': find_id(my_node.ring, x['sender_address']),
+                'receiver': find_id(my_node.ring, x['receiver_address']),
+                'amount': x['amount'],
+                'timestamp': x['timestamp']
+            })
     return jsonify(info), 200
 
 

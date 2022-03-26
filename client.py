@@ -22,7 +22,7 @@ class CLI(cmd.Cmd):
 
     def do_view(self, line):
         """view
-        View transactions of last block."""
+        View transactions of last validated block."""
         info = requests.get(f'http://{self.addr}:{self.port}/viewLast/')
         res_j = info.json()
         for x in res_j:
@@ -30,8 +30,8 @@ class CLI(cmd.Cmd):
                   f'coins on {time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(x["timestamp"]))}.')
 
     def do_t(self, line):
-        """t [recipient_id] [amount]
-        Send to recipient with [recipient_id] [amount] coins"""
+        """t <recipient_id> <amount>
+        Send to recipient with id <recipient_id> <amount> coins"""
         receiver_id, amount = map(int, line.split(' '))
         con = json.dumps({
             'id': receiver_id,

@@ -55,9 +55,3 @@ class Blockchain:
 
     def to_dict(self):
         return self.chain
-        '''
-        new_chain = []
-        for block in self.chain:
-            new_chain.append(block.to_dict())
-        return new_chain
-        '''
