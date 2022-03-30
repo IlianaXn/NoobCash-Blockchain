@@ -48,15 +48,15 @@ class Node:
         transactions : list[Transaction]
             a list which contains the transactions collected by the node but not yet added to the
             blockchain (default [])
-        self.block : Block
+        block : Block
             current block to be filled with collected transactions (default None)
-        self.chain : Blockchain
+        chain : Blockchain
             the blockchain of NoobCash network
         mining_flag : bool
             a flag that indicates whether node is currently mining or not (default False)
-        self.lock : threading.Lock
+        lock : threading.Lock
             a lock used to ensure isolation between procedures which change same objects
-        self.mining_lock : threading.Lock
+        mining_lock : threading.Lock
             a lock used to assure isolation of mining procedure
 
         Methods

@@ -52,6 +52,3 @@ class Blockchain:
         if isinstance(other, Blockchain):
             return self.chain == other.chain
         return False
-
-    def to_dict(self):
-        return self.chain

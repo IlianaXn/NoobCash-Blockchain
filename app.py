@@ -65,7 +65,7 @@ def hello():
     return 'Hi, I am alive!'
 
 
-# return all transactions contained in the last block of blockchain
+# return all pending transactions
 @app.route('/transactions/get', methods=['GET'])
 def get_transactions():
     info = []
@@ -119,7 +119,7 @@ def create_transaction():
     info = json.loads(request.json)
     if info is None:
         abort(404, description="Parameter not found in createTransaction endpoint")
-    elif info['id'] not in range(0, N):
+    elif info['id'] not in range(N) or info['amount'] < 0:
         return Response(status=400)
     else:
         receiver_addr = my_node.ring[info['id']][2]

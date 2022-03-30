@@ -23,7 +23,6 @@ def do_trans():
     num_trans = 0
     block_times = []
     initial_time = time.time()
-    last_time = 0
     different_chains = False
     ignore = N - 1
 
